@@ -6,11 +6,33 @@
 
 **prerequisite :** install MongoDb
 
-###How To
+	git clone https://github.com/k33g/backbone-ubiquity.git
+	cd backbone-ubiquity
+	mongod --dbpath db | node app.js
 
-####Models & Collection
+	# or you can use node monitor :
 
+	mongod --dbpath db | node app.js
 
+###How To try it
+
+In the console navigator :
+
+    //POST
+    var sam = new Human({firstName : "Bob", lastName : "Morane"});
+    sam.save({},{success:function(model){ console.log(model); }});
+
+    //GET
+    var tmp = new Human({id:sam.get("id")});
+    tmp.fetch({success:function(model){ console.log(model) }})
+
+    //PUT
+    sam.set("firstName","BOBY");
+    sam.save({},{success:function(model){ console.log(model); }});
+
+####Define Models & Collection
+
+	//TODO
 
 ###Run it
 
@@ -21,6 +43,7 @@
 	#in an other terminal
 	cd /appdirectory
 	mongod --dbpath db
+
 
 ##Recreate the boilerplate
 
@@ -38,7 +61,7 @@
 
 	md db
 
-
+	//TODO : to be continued
 
 
 ##Use only backbone.ubiquity.js
@@ -52,3 +75,7 @@ You need : underscore, backbone, mongojs. Then :
 	npm install mongojs
 
 ###How To
+
+	//TODO
+
+

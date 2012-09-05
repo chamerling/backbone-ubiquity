@@ -34,16 +34,6 @@ In the console navigator :
 
 	//TODO
 
-###Run it
-
-	#in a terminal
-	cd /appdirectory
-	nodejs app.js
-
-	#in an other terminal
-	cd /appdirectory
-	mongod --dbpath db
-
 
 ##Recreate the boilerplate
 

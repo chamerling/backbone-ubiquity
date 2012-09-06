@@ -2,13 +2,20 @@
     app.js
 ============================================*/
 
+
+/*============================================
+    TODO :
+    - session and authentication
+    - controllers
+============================================*/
+
 /*--------------------------------------------
     Includes and Declarations
 --------------------------------------------*/
 var express = require('express')
 //,   app = module.exports = express.createServer() --> deprecated
 ,   app = express()
-,   models = require('./models.js');
+,   Models = require('./models.js');
 
 
 
@@ -39,40 +46,26 @@ function Routes() {
         res.json({sessionID:req.sessionID});
     });
 
-    /*
-        $.ajax({
-            type:"POST",
-            url:"/human",
-            data : { firstName : "Bob", lastName : "Morane" } ,
-            dataType : 'json',
-            error:function(err){ console.log(err); },
-            success:function(dataFromServer) { console.log(dataFromServer); }
-        })
-    */
 
     app.post('/human',function(req, res){ //create 
         console.log("POST /human", req.body);
 
-        var johndoe = new models.Human(req.body);
+        var johndoe = new Models.Human(req.body);
 
         johndoe.save({},{
             success : function (model) {
                 res.json(model);
             },
             error : function (err) {
-                //TODO ...
                 ress.json(err);
             }
         });
-
     });
 
     app.put('/human/:id',function(req, res){ //update
         console.log("PUT /human", req.body, req.params.id);
 
-        var johndoe = new models.Human(req.body);
-
-        //johndoe.set("id", req.params.id);
+        var johndoe = new Models.Human(req.body);
 
         johndoe.save({id:req.params.id},{
             success : function (model) {
@@ -86,17 +79,11 @@ function Routes() {
 
     });    
 
-    /*
-        $.ajax({type:"GET", url:"/human/50478f0d85b2adb531000001",
-            error:function(err){ console.log(err); },
-            success:function(dataFromServer) { console.log(dataFromServer); }
-        })
-    */
+
     app.get('/human/:id', function(req, res){
         console.log("GET : /human/"+req.params.id);
         
-        var johndoe = new models.Human({id:req.params.id});
-        //johndoe.set("id", req.params.id)
+        var johndoe = new Models.Human({id:req.params.id});
 
         johndoe.fetch({
             success : function(model) {
@@ -113,9 +100,7 @@ function Routes() {
     app.delete('/human/:id', function(req, res){
         console.log("GET : /human/"+req.params.id);
         
-        var johndoe = new models.Human({id:req.params.id});
-
-        //johndoe.set("id", req.params.id)
+        var johndoe = new Models.Human({id:req.params.id});
 
         johndoe.destroy({
             success : function(model) {
@@ -123,11 +108,74 @@ function Routes() {
             },
             error : function (err) {
                 //TODO ...
-                ress.json(err);
+                res.json(err);
             }
         });
 
     });
+
+
+    //--- Collections ---
+
+    app.get('/humans', function(req, res){
+        console.log("GET (ALL) : /humans");
+        
+        var humans = new Models.Humans();
+
+        humans.fetch({
+            success : function(models) {
+                res.json(models); 
+            },
+            error : function (err) {
+                //TODO ...
+                res.json(err);
+            }
+        });
+
+    });
+
+
+    app.get('/humans/byfirstname/:id', function(req, res){
+        console.log("GET (SOME) : /humans/byfirstname/"+req.params.id);
+        
+        var firstName = req.params.id
+        ,   humans = new Models.Humans();
+        
+        humans.mongoQuery = {firstName : firstName};
+
+        humans.fetch({
+            success : function(models) {
+                res.json(models); 
+            },
+            error : function (err) {
+                //TODO ...
+                res.json(err);
+            }
+        });
+
+    });
+
+    app.get('/humans/query/:id', function(req, res){
+        console.log("GET (SOME) : /humans/query/"+req.params.id);
+        
+        var query = req.params.id
+        ,   humans = new Models.Humans();
+        
+        humans.mongoQuery = JSON.parse(query);
+        //humans.mongoQuery = query;
+
+        humans.fetch({
+            success : function(models) {
+                res.json(models); 
+            },
+            error : function (err) {
+                //TODO ...
+                res.json(err);
+            }
+        });
+
+    });
+
 
 
 }

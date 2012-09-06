@@ -2,15 +2,21 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <title>Backbone.Ubiquity</title>
-    <link href="jam/bootstrap/less/bootstrap.less" rel="stylesheet/less">
+    <!--<link rel="stylesheet/less" href="app/assets/bootstrap/less/bootstrap.less">-->
+    <link href="assets/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="assets/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet">
     <style>
         body {
             padding-top: 60px;
             padding-bottom: 40px;
+            visibility: hidden;
         }
     </style>
-    <link href="jam/bootstrap/less/responsive.less" rel="stylesheet/less">
+    <link href="assets/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet">
 </head>
 
 <body>
@@ -25,59 +31,49 @@
 
     <div class="container-fluid">
 
-        <div class="row-fluid">
+        <div id="welcome">
 
-            <div class="hero-unit">
-                <h1>Backbone.Ubiquity</h1>
-            </div>
+
 
         </div>
 
     </div>
 
 </body>
-<!-- === Frameworks === -->
 
-<script src="jam/require.js"></script>
+<!-- === Vendors === -->
+<script src="assets/javascripts/jquery-1.7.2.js"></script>
+<script src="assets/javascripts/underscore.js"></script>
+<script src="assets/javascripts/backbone.js"></script>
+<script src="assets/javascripts/async.js"></script>
+<script src="assets/javascripts/showdown.js"></script>
+<script src="assets/javascripts/gh3.js"></script>
+<script src="assets/bootstrap/js/bootstrap.min.js"></script>
+
+
 
 <!-- === code applicatif === -->
+<!--
+    models.js is shared between client (index.html) and server (app.js)
+-->
+<script src="models.js"></script> 
+
+<script src="welcome.js"></script> 
+
 <script>
-    var packages = [];
-    jam.packages.forEach(function(pkg){packages.push(pkg.name);});
-    console.log(packages);
-    require(packages, function () {
+    
 
-        $(function (){
-            console.log("WELCOME ...");
+    $(function (){
+        $('body').css("visibility","visible");
+        
+        welcome();
 
-            window.Human = Backbone.Model.extend({
-                urlRoot :"/human"
-            });
+    });
 
-            /* Try this in console mode (navigator) :
-
-                //POST
-                var sam = new Human({firstName : "Bob", lastName : "Morane"});
-                sam.save({},{success:function(model){ console.log(model); }});
-
-                //GET
-                var tmp = new Human({id:sam.get("id")});
-                tmp.fetch({success:function(model){ console.log(model) }})
-
-                //PUT
-                sam.set("firstName","BOBY");
-                sam.save({},{success:function(model){ console.log(model); }});
-
-
-            */
-
-
-        });
-
-
-       
-
-    });    
+ 
 
 </script>
+<!-- === Frameworks === -->
+
+
 </html>

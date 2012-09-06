@@ -14,7 +14,7 @@ var ObjectId = require("mongojs").ObjectId;
 
 sync = function(method, model, options) {
 
-	this.version = "0.0.0";
+	this.version = "0.0.1";
 
 	var methodMap = {
 		'create': 'POST',
@@ -24,16 +24,41 @@ sync = function(method, model, options) {
 	};
 	var type = methodMap[method];
 
-	/* TODO : 
-		- switch instead of if
-		- delete
-		- collections
-		- queries
-
-
-	*/
-
 	if(model.model) { //This is a collection
+
+		switch (type) {
+			case "GET":
+				if(model.mongoQuery==null || model.mongoQuery==undefined || model.mongoQuery=="") {
+
+					mongo.db[model.mongo].find(function(err, models) {
+						if(err) {
+							if(options.error) options.error(err);
+						} else {
+							//TODO : if not found ?
+							if(options.success) options.success(models); 
+						}
+					});
+
+				} else { 
+
+					mongo.db[model.mongo].find(model.mongoQuery, function(err, models) {
+						if(err) {
+							if(options.error) options.error(err);
+						} else {
+							//options.success(model.toJSON());
+							//TODO : if not found ?
+							if(options.success) options.success(models); 
+						}
+					});
+				}
+
+			break;
+
+			default:
+				console.log ("???");			
+		}
+
+
 
 	} else { //This is a model
 

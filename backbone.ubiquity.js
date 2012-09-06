@@ -33,49 +33,68 @@ sync = function(method, model, options) {
 
 	*/
 
-	if(!model.model && type == 'POST') { //CREATION
+	if(model.model) { //This is a collection
 
-		mongo.db[model.mongo].save(model.toJSON(), function(err, created) {
-			model.set("id", created._id );
-			if(err) {
-				if(options.error) options.error(err);
-			} else {
-				//options.success(model.toJSON());
-				if(options.success) options.success(model); //or created ?
-			}
-		});
-				
-	}
+	} else { //This is a model
 
-	if(!model.model && type == 'PUT') { //SAUVEGARDE (then id exists)
+		switch (type) {
 
-
-
-		mongo.db[model.mongo].update({ _id:ObjectId(model.get("id")) }, { $set : model.toJSON() }, function(err, updated) {
-			if(err) {
-				if(options.error) options.error(err);
-			} else {
-				if(options.success) options.success(updated[0]);
-			}
-		} );
-	}
-
-	if(!model.model && type == 'GET') { 
-		//https://github.com/gett/mongojs/issues/16
-
-		mongo.db[model.mongo].find({ _id:ObjectId(model.get("id")) }, function(err, founded) {
-			if(err) {
-				if(options.error) options.error(err);
-			} else {
-				founded[0]._id = undefined;
-				if(options.success) options.success(founded[0]);
-			}
-		});
-
-	}
+			case "POST": //CREATE
+				mongo.db[model.mongo].save(model.toJSON(), function(err, created) {
+					model.set("id", created._id );
+					if(err) {
+						if(options.error) options.error(err);
+					} else {
+						//options.success(model.toJSON());
+						if(options.success) options.success(model); //or created ?
+					}
+				});
+			break;
 
 
-	if(!model.model && type == 'DELETE') { 
+			case "PUT": //UPDATE
+				mongo.db[model.mongo].update({ _id:ObjectId(model.get("id")) }, { $set : model.toJSON() }, function(err, updated) {
+					if(err) {
+						if(options.error) options.error(err);
+					} else {
+						if(options.success) options.success(updated[0]);
+					}
+				} );
+			break;
+
+
+			case "GET": //FETCH
+				mongo.db[model.mongo].find({ _id:ObjectId(model.get("id")) }, function(err, founded) {
+					if(err) {
+						if(options.error) options.error(err);
+					} else {
+						// --> if undefined (founded) --> not found
+						if(founded[0]) { 
+							founded[0]._id = undefined;
+							if(options.success) options.success(founded[0]);
+						} else {
+							//console.log("--- NOT FOUNDED ---");
+							if(options.success) options.success({id:null});
+						}
+					}
+				});
+			break;
+
+
+			case "DELETE": //DESTROY -->TODO: TO BE TESTED
+				mongo.db[model.mongo].remove({ _id:ObjectId(model.get("id")) }, function(err, deleted) {
+					if(err) {
+						if(options.error) options.error(err);
+					} else {
+						if(options.success) options.success(deleted);
+					}
+				});
+			break;
+
+			default:
+				console.log ("???");
+
+		}
 
 	}
 

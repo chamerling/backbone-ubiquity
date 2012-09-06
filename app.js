@@ -96,10 +96,28 @@ function Routes() {
         console.log("GET : /human/"+req.params.id);
         
         var johndoe = new models.Human({id:req.params.id});
-
         //johndoe.set("id", req.params.id)
 
         johndoe.fetch({
+            success : function(model) {
+                res.json(model); //if not found id of model is null
+            },
+            error : function (err) {
+                //TODO ...
+                res.json(err);
+            }
+        });
+
+    });
+
+    app.delete('/human/:id', function(req, res){
+        console.log("GET : /human/"+req.params.id);
+        
+        var johndoe = new models.Human({id:req.params.id});
+
+        //johndoe.set("id", req.params.id)
+
+        johndoe.destroy({
             success : function(model) {
                 res.json(model);
             },

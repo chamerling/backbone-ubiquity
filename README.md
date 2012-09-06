@@ -23,6 +23,12 @@ And Babkbone models are **shared between client** (`index.html`) **and server** 
 
 	mongod --dbpath db | nodemon app.js
 
+Or, instead of `git clone` command, you can download the zip : [https://github.com/k33g/backbone-ubiquity/zipball/master](https://github.com/k33g/backbone-ubiquity/zipball/master).
+
+- unzip
+- change directory
+- launch `mongod --dbpath db | node app.js`
+
 ##Quick-Start
 
 **index.html** is your start page.

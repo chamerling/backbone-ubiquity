@@ -1,5 +1,19 @@
 /*============================================
     app.js
+    by k33g (github)
+    @k33g_org
+    http://about.me/ph.charriere
+
+    Run me :
+    go to the application directory :
+    mongod --dbpath db | node app.js
+
+    License :
+    Backnone-Ubiquity is available under the terms of the MIT-License.
+
+    Copyright 2012, Philippe Charrière
+
+
 ============================================*/
 
 

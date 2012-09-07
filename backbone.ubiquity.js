@@ -14,7 +14,7 @@ var ObjectId = require("mongojs").ObjectId;
 
 sync = function(method, model, options) {
 
-	this.version = "0.0.1";
+	this.version = "0.0.2";
 
 	var methodMap = {
 		'create': 'POST',
@@ -35,7 +35,13 @@ sync = function(method, model, options) {
 							if(options.error) options.error(err);
 						} else {
 							//TODO : if not found ?
-							if(options.success) options.success(models); 
+							if(options.success) {
+                                models.forEach(function(model){
+                                    model.id = model._id;
+                                    model._id = undefined;
+                                });
+                                options.success(models);
+                            }
 						}
 					});
 
@@ -47,7 +53,13 @@ sync = function(method, model, options) {
 						} else {
 							//options.success(model.toJSON());
 							//TODO : if not found ?
-							if(options.success) options.success(models); 
+                            if(options.success) {
+                                models.forEach(function(model){
+                                    model.id = model._id;
+                                    model._id = undefined;
+                                });
+                                options.success(models);
+                            }
 						}
 					});
 				}

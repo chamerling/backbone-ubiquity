@@ -31,11 +31,7 @@
 
     <div class="container-fluid">
 
-        <div id="welcome">
-
-
-
-        </div>
+        <div id="welcome"></div>
 
     </div>
 
@@ -45,6 +41,7 @@
 <script src="assets/javascripts/jquery-1.7.2.js"></script>
 <script src="assets/javascripts/underscore.js"></script>
 <script src="assets/javascripts/backbone.js"></script>
+<script src="assets/javascripts/mustache.js"></script>
 <script src="assets/javascripts/async.js"></script>
 <script src="assets/javascripts/showdown.js"></script>
 <script src="assets/javascripts/gh3.js"></script>
@@ -58,15 +55,23 @@
 -->
 <script src="models.js"></script> 
 
-<script src="welcome.js"></script> 
+<script src="welcome.js"></script>
+<script src="sample.js"></script>
 
 <script>
     
 
     $(function (){
         $('body').css("visibility","visible");
-        
         welcome();
+
+        //loadSample();
+        /*
+            you can run sample without "welcome" :
+            - comment welcome()
+            - uncomment loadSample()
+            - change <div id="welcome"></div> by <div id="sample"></div>
+         */
 
     });
 

@@ -269,4 +269,7 @@ It's better if you write controllers, but you can do this (see `app.js`) :
 
 	//TODO
 
+##License :
 
+Backnone-Ubiquity is available under the terms of the MIT-License.
+Copyright 2012, Philippe Charrière

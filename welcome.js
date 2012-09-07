@@ -25,12 +25,8 @@ function welcome() {
 					$('#prezfr').html(mdConverter.makeHtml(dataFromServer));
 				}
 			})
-			$.ajax({type:"GET", url:"/SAMPLES.md",
-				error:function(err){ console.log(err); },
-				success:function(dataFromServer) { 
-					$('#samples').html(mdConverter.makeHtml(dataFromServer));
-				}
-			})       
+
+            loadSample();
 
 			console.log("WELCOME TO BACKBONE-UBIQUITY ...");
 

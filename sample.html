@@ -1,0 +1,33 @@
+<h2>This is the sample tab</h2>
+<hr>
+<div>
+    <h3>Add human to list :</h3>
+
+    <script type="text/template" id="human_form_tpl">
+
+        <input name="firstName" type="text" placeholder="firstName"/>
+        <input name="lastName" type="text" placeholder="lastName"/>
+        <a href="#" class="btn btn-primary">Add</a>
+
+        <div>{{message}}</div>
+    </script>
+    <form id="human_form">
+    </form>
+
+</div>
+
+
+<div>
+    <h3>Humans list :</h3>
+    <script type="text/template" id="humans_list_tpl">
+        <ul>{{#humans}}
+            <li><a href="select/#/{{id}}">{{id}}</a> - {{firstName}} {{lastName}}</li>
+            {{/humans}}
+        </ul>
+    </script>
+    <div id="humans_list">
+
+    </div>
+</div>
+
+

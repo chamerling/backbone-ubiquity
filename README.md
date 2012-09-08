@@ -72,10 +72,13 @@ Then, code your models/collections in `models` directory, see `models/humans.js`
 
 - `url` and `urlRoot` are only used in client side
 - `mongo` is a model and collection property needed by **MongoJS**. It enables to set the collection name (for **MongoDb** persistence)
-- You have to declare `model.js`, 'human.js', etc. ... in `index.html` :
+- You have to declare `model.js`, `human.js`, etc. ... in `index.html` :
+
+Like that :
 
     <script src="models/models.js"></script>
     <script src="models/humans.js"></script>
+    <!-- etc. ... -->
 
 ###Define Controllers
 

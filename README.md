@@ -35,7 +35,7 @@ Or, instead of `git clone` command, you can download the zip : [https://github.c
 
 ###Define Models & Collections
 
-Backbone models and Backbone collections are declared in `models/models.js`. And **in `models.js` you have to declare MongoDB collections : **
+Backbone models and Backbone collections are declared in `models/models.js`. And **in `models.js` you have to declare MongoDB collections :**
 
     if (typeof exports == 'undefined') { //Client side
         Models = window.Models = {};

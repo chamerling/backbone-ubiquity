@@ -35,14 +35,19 @@ Or, instead of `git clone` command, you can download the zip : [https://github.c
 
 ###Define Models & Collections
 
-Backnone models and Backbone collections are defined in `models.js` :
+Backbone models and Backbone collections are declared in `models/models.js`. And **in `models.js` you have to declare MongoDB collections : **
+
+    if (typeof exports == 'undefined') { //Client side
+        Models = window.Models = {};
+    } else { //Server side
+        mongo.connect(["humans","animals"],'db');
+        require('./animals.js');
+        require('./humans.js');
+    }
+
+Then, code your models/collections in `models` directory, see `models/humans.js`
 
 	/*=== Models & Collections Definition ===*/
-
-	if (typeof exports !== 'undefined') {
-		//Define mongodb collections and path database
-		mongo.connect(["humans","animals"],'db');
-	}
 
 	Models.Human = Backbone.Model.extend({
 		urlRoot :"/human",
@@ -64,32 +69,144 @@ Backnone models and Backbone collections are defined in `models.js` :
         }
 	});
 
-	Models.Animal = Backbone.Model.extend({});
-	Models.Animals = Backbone.Collection.extend({});
 
 - `url` and `urlRoot` are only used in client side
 - `mongo` is a model and collection property needed by **MongoJS**. It enables to set the collection name (for **MongoDb** persistence)
-- You have to declare `model.js` in `index.html` : `<script src="models.js"></script>`
-- You have to declare `model.js` in `app.js` : `Models = require('./models.js');`
+- You have to declare `model.js`, 'human.js', etc. ... in `index.html` :
 
-###Define route in `app.js` and use it in `index.html` : MODELS
+    <script src="models/models.js"></script>
+    <script src="models/humans.js"></script>
 
-It's better if you write controllers, but you can do this (see `app.js`) :
+###Define Controllers
+
+Normally, Backbone.Controller doesn't exist. I've just defined for server side convenience, like that :
+
+    Backbone.Controller = function() {};
+    Backbone.Controller.extend = Backbone.Model.extend;
+
+You can code your controllers in `controllers` directory. Don't forget to declare each controller in `controllers/controllers.js` :
+
+    require('./humans.js');
+
+And ie `humans.js` :
+
+
+    Controllers.Humans = Backbone.Controller.extend({},{ //Static
+
+        create:function(req, res) {
+            var johndoe = new Models.Human(req.body);
+
+            johndoe.save({},{
+                success : function (model) {
+                    res.json(model);
+                },
+                error : function (err) {
+                    res.json(err);
+                }
+            });
+        },
+
+        update:function(req, res) {
+            var johndoe = new Models.Human(req.body);
+
+            johndoe.save({id:req.params.id},{
+                success : function (model) {
+                    res.json(model);
+                },
+                error : function (err) {
+                    res.json(err);
+                }
+            });
+        },
+        getById:function(req, res) {
+            var johndoe = new Models.Human({id:req.params.id});
+
+            johndoe.fetch({
+                success : function(model) {
+                    res.json(model); //if not found id of model is null
+                },
+                error : function (err) {
+                    res.json(err);
+                }
+            });
+        },
+        delete : function (req, res) {
+            var johndoe = new Models.Human({id:req.params.id});
+
+            johndoe.destroy({
+                success : function(model) {
+                    res.json(model);
+                },
+                error : function (err) {
+                    res.json(err);
+                }
+            });
+        },
+        getAll : function (req, res) {
+            var humans = new Models.Humans();
+
+            humans.fetch({
+                success : function(models) {
+                    res.json(models);
+                },
+                error : function (err) {
+                    res.json(err);
+                }
+            });
+        },
+        getByFirstName : function (req, res) {
+            var firstName = req.params.id
+                ,   humans = new Models.Humans();
+
+            humans.mongoQuery = {firstName : firstName};
+
+            humans.fetch({
+                success : function(models) {
+                    res.json(models);
+                },
+                error : function (err) {
+                    res.json(err);
+                }
+            });
+        },
+        getSome : function (req, res) {
+            var query = req.params.id
+                ,   humans = new Models.Humans();
+
+            humans.mongoQuery = JSON.parse(query);
+            //humans.mongoQuery = query;
+
+            humans.fetch({
+                success : function(models) {
+                    res.json(models);
+                },
+                error : function (err) {
+                    res.json(err);
+                }
+            });
+        }
+
+    });
+
+
+###Define routes in `routes.js`
+
+    exports.routes = function (app) {
+
+        app.get('/getsessionid',function(req, res){
+            console.log(req.sessionID);
+            res.json({sessionID:req.sessionID});
+        });
+
+        //etc. ...
+
+    }
 
 ####Create Human model in database : (server side)
 
-	app.post('/human',function(req, res){ //create 
-
-        var johndoe = new Models.Human(req.body);
-
-        johndoe.save({},{
-            success : function (model) {
-                res.json(model);
-            },
-            error : function (err) {
-                ress.json(err);
-            }
-        });
+    app.post('/human',function(req, res){ //create
+        console.log("POST /human", req.body);
+        Controllers.Humans.create(req, res);
     });
 
 #####Call the service (client side) :
@@ -104,18 +221,8 @@ It's better if you write controllers, but you can do this (see `app.js`) :
 ####Get Human model by Id in database : (server side)
 
     app.get('/human/:id', function(req, res){
-
-        var johndoe = new Models.Human({id:req.params.id});
-
-        johndoe.fetch({
-            success : function(model) {
-                res.json(model); //if not found id of model is null
-            },
-            error : function (err) {
-                res.json(err);
-            }
-        });
-
+        console.log("GET : /human/"+req.params.id);
+        Controllers.Humans.getById(req, res);
     });
 
 #####Call the service (client side) :
@@ -130,18 +237,8 @@ It's better if you write controllers, but you can do this (see `app.js`) :
 ####Update Human model in database : (server side)
 
     app.put('/human/:id',function(req, res){ //update
-
-        var johndoe = new Models.Human(req.body);
-
-        johndoe.save({id:req.params.id},{
-            success : function (model) {
-                res.json(model);
-            },
-            error : function (err) {
-                ress.json(err);
-            }
-        });
-
+        console.log("PUT /human", req.body, req.params.id);
+        Controllers.Humans.update(req, res);
     });
 
 #####Call the service (client side) :
@@ -156,18 +253,8 @@ It's better if you write controllers, but you can do this (see `app.js`) :
 ####Delete Human model by Id in database : (server side)
 
     app.delete('/human/:id', function(req, res){
-        
-        var johndoe = new Models.Human({id:req.params.id});
-
-        johndoe.destroy({
-            success : function(model) {
-                res.json(model);
-            },
-            error : function (err) {
-                res.json(err);
-            }
-        });
-
+        console.log("GET : /human/"+req.params.id);
+        Controllers.Humans.delete(req, res);
     });
 
 #####Call the service (client side) :
@@ -183,18 +270,8 @@ It's better if you write controllers, but you can do this (see `app.js`) :
 ####Get All Human models from database : (server side)
 
     app.get('/humans', function(req, res){
-        
-        var humans = new Models.Humans();
-
-        humans.fetch({
-            success : function(models) {
-                res.json(models); 
-            },
-            error : function (err) {
-                res.json(err);
-            }
-        });
-
+        console.log("GET (ALL) : /humans");
+        Controllers.Humans.getAll(req, res);
     });
 
 #####Call the service (client side) :
@@ -205,21 +282,8 @@ It's better if you write controllers, but you can do this (see `app.js`) :
 ####Get Some Human models by firstName from database : (server side)
 
     app.get('/humans/byfirstname/:id', function(req, res){
-        
-        var firstName = req.params.id
-        ,   humans = new Models.Humans();
-        
-        humans.mongoQuery = {firstName : firstName};
-
-        humans.fetch({
-            success : function(models) {
-                res.json(models); 
-            },
-            error : function (err) {
-                res.json(err);
-            }
-        });
-
+        console.log("GET (SOME) : /humans/byfirstname/"+req.params.id);
+        Controllers.Humans.getByFirstName(req, res);
     });
 
 #####Call the service (client side) :
@@ -232,21 +296,8 @@ It's better if you write controllers, but you can do this (see `app.js`) :
 ####Get Some Human models with parameterized query from database : (server side)
 
     app.get('/humans/query/:id', function(req, res){
-        
-        var query = req.params.id
-        ,   humans = new Models.Humans();
-        
-        humans.mongoQuery = JSON.parse(query); //transform query to JSON object
-
-        humans.fetch({
-            success : function(models) {
-                res.json(models); 
-            },
-            error : function (err) {
-                res.json(err);
-            }
-        });
-
+        console.log("GET (SOME) : /humans/query/"+req.params.id);
+        Controllers.Humans.getSome(req, res);
     });
 
 #####Call the service (client side) :

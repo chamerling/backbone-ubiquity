@@ -1,12 +1,4 @@
 
-/*
- if (typeof exports == 'undefined') {
- Models = window.Models = {};
- }
- */
-
-typeof exports === 'undefined' ? Models = window.Models = {}:null;
-
 Models.Human = Backbone.Model.extend({
     urlRoot :"/human",
     mongo : "humans", //mongodb collection | mandatory

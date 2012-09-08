@@ -1,7 +1,9 @@
-/**
- * Created with IntelliJ IDEA.
- * User: k33g_org
- * Date: 9/8/12
- * Time: 11:29 AM
- * To change this template use File | Settings | File Templates.
- */
+if (typeof exports == 'undefined') { //Client side
+    Models = window.Models = {};
+} else { //Server side
+    mongo.connect(["humans","animals"],'db');
+    require('./animals.js');
+    require('./humans.js');
+}
+
+//typeof exports === 'undefined' ? Models = window.Models = {}:null;

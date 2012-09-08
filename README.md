@@ -4,6 +4,7 @@ BB-Ubiquity is a boilerplate nodejs webapplication to make SPA with these compon
 
 - express
 - backbone
+- socket.io (client+server)
 - mongodb (+ mongojs)
 - twitter bootstrap
 
@@ -310,6 +311,52 @@ And ie `humans.js` :
         .fetch({success:function(models){ console.log(models) }});
 
 **Please note :** url is quoted with `''` and query is a json string : all members (names and values) are quoted with `""`.
+
+##Websockets
+
+It's very easy to use (thanks to [socket.io](http://socket.io/)).
+
+###Server side
+
+Define port, socket and treatments in `sockets/sockets.js` :
+
+    var io = require('socket.io').listen(8000);
+
+    io.sockets.on('connection', function (socket) {
+
+        var humans = new Models.Humans();
+
+        humans.fetch({
+            success : function(models) {
+
+                var totOfHumans = models.length, i;
+
+                setInterval(function(){
+                    i = Math.floor(Math.random() * totOfHumans);
+
+                    socket.emit('message', {
+                        firstName:models.at(i).get("firstName"),
+                        lastName:models.at(i).get("lastName")
+                    });
+
+                },200);
+            },
+            error : function (err) {
+
+            }
+        });
+
+    });
+
+###Client side
+
+Include js client code like that : `<script src="http://localhost:8000/socket.io/socket.io.js"></script>` *(note the port number)*. Next you can write client side javascript code like that :
+
+    var socket = io.connect("http://localhost:8000");
+
+    socket.on("message", function(data) {
+        $("#socket_message").html(data.firstName + " " + data.lastName);
+    });
 
 
 ##Work in progress

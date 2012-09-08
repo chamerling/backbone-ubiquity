@@ -28,6 +28,7 @@ var express = require('express')
 ,   app = express();
 
 
+
 /* === globals === */
 Models = {};  //global
 Controllers = {};
@@ -42,6 +43,7 @@ mongo = require('./libs/backbone.ubiquity.js').mongo;
 require('./models/models.js');
 require('./controllers/controllers.js');
 
+require('./sockets/sockets.js');
 
 /*--------------------------------------------
 	Express parameters

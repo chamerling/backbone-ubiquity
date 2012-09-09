@@ -32,6 +32,8 @@
     <div class="container-fluid">
 
         <div id="welcome"></div>
+        <!--<div id="sample"></div>-->
+        <!--<div id="users"></div>-->
 
     </div>
 
@@ -55,11 +57,13 @@
 -->
 <script src="models/models.js"></script>
 <script src="models/humans.js"></script>
+<script src="models/users.js"></script>
 <script src="models/animals.js"></script>
 
-<script src="http://localhost:8000/socket.io/socket.io.js"></script>
+<!--<script src="http://localhost:8000/socket.io/socket.io.js"></script> -->
 <script src="welcome.js"></script>
 <script src="sample.js"></script>
+<script src="users.js"></script>
 
 <script>
     
@@ -69,6 +73,7 @@
         welcome();
 
         //loadSample();
+        //loadUsers();
         /*
             you can run sample without "welcome" :
             - comment welcome()
@@ -77,8 +82,6 @@
          */
 
     });
-
- 
 
 </script>
 <!-- === Frameworks === -->

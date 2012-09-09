@@ -1,0 +1,36 @@
+<h2>This is the users tab</h2>
+<div class="alert alert-info">Users Admin</div>
+<hr>
+<div>
+    <h3>Add User :</h3>
+
+    <script type="text/template" id="user_form_tpl">
+        <input name="pseudo" type="text" placeholder="pseudo"/>
+        <input name="password" type="text" placeholder="password"/><br>
+        <input name="email" type="text" placeholder="email"/><br>
+        <input name="firstName" type="text" placeholder="firstName"/>
+        <input name="lastName" type="text" placeholder="lastName"/><br>
+        Admin ? <input name="isAdmin" type="checkbox" /><br>
+        <a id="btnAddUser" class="btn btn-primary">Add User</a>
+
+        <span id="user_message">{{message}}</span>
+    </script>
+    <form id="user_form">
+    </form>
+
+</div>
+
+
+<div>
+    <h3>Users list :</h3>
+    <script type="text/template" id="users_list_tpl">
+        <ul>{{#users}}
+            <li><a href="select/#/{{id}}">{{id}} {{pseudo}} {{email}}</a> - {{firstName}} {{lastName}}</li>
+            {{/users}}
+        </ul>
+    </script>
+    <div id="users_list">
+
+    </div>
+</div>
+

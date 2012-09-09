@@ -67,7 +67,7 @@ Controllers.Humans = Backbone.Controller.extend({},{ //Static
         });
     },
     getByFirstName : function (req, res) {
-        var firstName = req.params.id
+        var firstName = req.params.firstname
             ,   humans = new Models.Humans();
 
         humans.mongoQuery = {firstName : firstName};
@@ -83,7 +83,7 @@ Controllers.Humans = Backbone.Controller.extend({},{ //Static
         });
     },
     getSome : function (req, res) {
-        var query = req.params.id
+        var query = req.params.query
             ,   humans = new Models.Humans();
 
         humans.mongoQuery = JSON.parse(query);

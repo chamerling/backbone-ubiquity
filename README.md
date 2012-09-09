@@ -159,7 +159,7 @@ And ie `humans.js` :
             });
         },
         getByFirstName : function (req, res) {
-            var firstName = req.params.id
+            var firstName = req.params.firstname
                 ,   humans = new Models.Humans();
 
             humans.mongoQuery = {firstName : firstName};
@@ -174,7 +174,7 @@ And ie `humans.js` :
             });
         },
         getSome : function (req, res) {
-            var query = req.params.id
+            var query = req.params.query
                 ,   humans = new Models.Humans();
 
             humans.mongoQuery = JSON.parse(query);
@@ -285,8 +285,8 @@ And ie `humans.js` :
 
 ####Get Some Human models by firstName from database : (server side)
 
-    app.get('/humans/byfirstname/:id', function(req, res){
-        console.log("GET (SOME) : /humans/byfirstname/"+req.params.id);
+    app.get('/humans/byfirstname/:firstname', function(req, res){
+        console.log("GET (SOME) : /humans/byfirstname/"+req.params.firstname);
         Controllers.Humans.getByFirstName(req, res);
     });
 
@@ -299,8 +299,8 @@ And ie `humans.js` :
 
 ####Get Some Human models with parameterized query from database : (server side)
 
-    app.get('/humans/query/:id', function(req, res){
-        console.log("GET (SOME) : /humans/query/"+req.params.id);
+    app.get('/humans/query/:query', function(req, res){
+        console.log("GET (SOME) : /humans/query/"+req.params.query);
         Controllers.Humans.getSome(req, res);
     });
 
@@ -361,9 +361,12 @@ Include js client code like that : `<script src="http://localhost:8000/socket.io
 
 ##Work in progress
 
-- session and authentication
+- session and authentication -> work in progress
 - bootstrap + less
 - more documentation
+- use [nodefetch](https://github.com/jackfranklin/nodefetch) about client-side assets updates
+- use with coffeescript
+- bootstraping with [Faker](https://github.com/Marak/Faker.js)
 
 
 ##Use only backbone.ubiquity.js

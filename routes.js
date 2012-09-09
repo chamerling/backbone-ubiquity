@@ -14,7 +14,16 @@ exports.routes = function (app) {
         res.json({sessionID:req.sessionID});
     });
 
-
+    app.get('/session-index', function (req, res, next) {
+        // Increment "index" in session
+        req.session.index = (req.session.index || 0) + 1;
+        // View "session-index.ejs"
+        res.json('session-index', {
+            "index":  req.session.index,
+            "sessId": req.sessionID
+        });
+    });
+    /*=== HUMANS ===*/
     app.post('/human',function(req, res){ //create
         console.log("POST /human", req.body);
         Controllers.Humans.create(req, res);
@@ -45,15 +54,52 @@ exports.routes = function (app) {
     });
 
 
-    app.get('/humans/byfirstname/:id', function(req, res){
-        console.log("GET (SOME) : /humans/byfirstname/"+req.params.id);
+    app.get('/humans/byfirstname/:firstname', function(req, res){
+        console.log("GET (SOME) : /humans/byfirstname/"+req.params.firstname);
         Controllers.Humans.getByFirstName(req, res);
     });
 
-    app.get('/humans/query/:id', function(req, res){
-        console.log("GET (SOME) : /humans/query/"+req.params.id);
+    app.get('/humans/query/:query', function(req, res){
+        console.log("GET (SOME) : /humans/query/"+req.params.query);
         Controllers.Humans.getSome(req, res);
     });
+
+    /*=== USERS ===*/
+    app.post('/user',function(req, res){ //create
+        console.log("POST /user", req.body);
+        Controllers.Users.create(req, res);
+    });
+
+    app.put('/user/:id',function(req, res){ //update
+        console.log("PUT /user", req.body, req.params.id);
+        Controllers.Users.update(req, res);
+    });
+
+
+    app.get('/user/:id', function(req, res){
+        console.log("GET : /user/"+req.params.id);
+        Controllers.Users.getById(req, res);
+    });
+
+    app.delete('/user/:id', function(req, res){
+        console.log("GET : /user/"+req.params.id);
+        Controllers.Users.delete(req, res);
+    });
+
+
+    //--- Collections ---
+
+    app.get('/users', function(req, res){
+        console.log("GET (ALL) : /users");
+        Controllers.Users.getAll(req, res);
+    });
+
+
+    app.get('/users/login/:login', function(req, res){
+        console.log("GET (SOME) : /users/login/"+req.params.login);
+        Controllers.Users.getAuthenticatedUser(req, res);
+    });
+
 
 }
 

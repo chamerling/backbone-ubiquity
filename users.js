@@ -16,6 +16,20 @@ Admin = {
 
     load : function () {
 
+        /*
+         SOCKETS
+         */
+        var that = this;
+        this.socket_message = $("#socket_message_user");
+
+        this.socket = io.connect("http://localhost:8000");
+
+        this.socket.on("message_user", function(data) {
+
+            that.socket_message.html(data.pseudo+ " "+ data.email+ " "+ data.firstName + " " + data.lastName);
+        });
+
+
         this.views.UsersList = Backbone.View.extend({
             el : $("#users_list"),
             initialize : function () {

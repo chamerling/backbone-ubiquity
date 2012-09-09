@@ -6,6 +6,7 @@ io.sockets.on('connection', function (socket) {
     io.sockets.emit('this', { will: 'be received by everyone' });
 
     var humans = new Models.Humans();
+    var users = new Models.Users();
 
     humans.fetch({
         success : function(models) {
@@ -17,6 +18,32 @@ io.sockets.on('connection', function (socket) {
                 //console.log(i,models.at(i));
 
                 socket.emit('message', {
+                    firstName:models.at(i).get("firstName"),
+                    lastName:models.at(i).get("lastName")
+                });
+
+            },200);
+
+            //Math.floor(Math.random() * 6) + 1
+
+        },
+        error : function (err) {
+
+        }
+    });
+
+    users.fetch({
+        success : function(models) {
+
+            var totOfUsers = models.length, i;
+
+            setInterval(function(){
+                i = Math.floor(Math.random() * totOfUsers);
+                //console.log(i,models.at(i));
+
+                socket.emit('message_user', {
+                    pseudo:models.at(i).get("pseudo"),
+                    email:models.at(i).get("email"),
                     firstName:models.at(i).get("firstName"),
                     lastName:models.at(i).get("lastName")
                 });

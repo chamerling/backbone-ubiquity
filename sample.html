@@ -2,13 +2,11 @@
 <div class="alert alert-info"><b>Model pushed by the server :</b> <span id="socket_message"></span></div>
 <hr>
 <div>
-    <h3>Add human to list :</h3>
-
     <script type="text/template" id="human_form_tpl">
 
         <input name="firstName" type="text" placeholder="firstName"/>
-        <input name="lastName" type="text" placeholder="lastName"/>
-        <a class="btn btn-primary">Add</a>
+        <input name="lastName" type="text" placeholder="lastName"/><br>
+        <a class="btn btn-primary">Add Human to list</a>
 
         <div>{{message}}</div>
     </script>
@@ -19,12 +17,28 @@
 
 
 <div>
-    <h3>Humans list :</h3>
+
     <script type="text/template" id="humans_list_tpl">
-        <ul>{{#humans}}
-            <li><a href="select/#/{{id}}">{{id}}</a> - {{firstName}} {{lastName}}</li>
+
+        <table class="table table-striped table-bordered table-hover">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+            </tr>
+            </thead>
+
+            <tbody>{{#humans}}
+            <tr>
+                <td><a href="select/#/{{id}}">{{id}}</a></td>
+                <td>{{firstName}}</td>
+                <td>{{lastName}}</td>
+            </tr>
             {{/humans}}
-        </ul>
+            </tbody>
+        </table>
+
     </script>
     <div id="humans_list">
 

@@ -19,14 +19,14 @@ App = {
         /*
             SOCKETS
          */
-        /*var that = this;
+        var that = this;
         this.socket_message = $("#socket_message");
         this.socket = io.connect("http://localhost:8000");
 
         this.socket.on("message", function(data) {
 
             that.socket_message.html(data.firstName + " " + data.lastName);
-        });*/
+        });
 
 
         this.views.HumansList = Backbone.View.extend({

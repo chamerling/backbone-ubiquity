@@ -1,11 +1,9 @@
 function loadSample() {
-    $.ajax({type:"GET", url:"/sample.html",
+    $.ajax({type:"GET", url:"/spa.parts/sample.html",
         error:function(err){ console.log(err); },
         success:function(dataFromServer) {
             $('#sample').html(dataFromServer);
-
             App.load();
-
         }
     })
 }
@@ -87,11 +85,6 @@ App = {
         humans.fetch({success: function(data){
             humansList.render();
         }});
-
-
-
-
-
 
     }
 }

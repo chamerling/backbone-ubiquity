@@ -2,7 +2,7 @@ function welcome() {
 
     var mdConverter = new Showdown.converter();
 
-    $.ajax({type:"GET", url:"/welcome.html",
+    $.ajax({type:"GET", url:"/spa.parts/welcome.html",
         error:function(err){ console.log(err); },
         success:function(dataFromServer) { 
         	$('#welcome').html(dataFromServer);

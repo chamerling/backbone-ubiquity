@@ -1,5 +1,5 @@
 function loadUsers() {
-    $.ajax({type:"GET", url:"/users.html",
+    $.ajax({type:"GET", url:"/spa.parts/users.html",
         error:function(err){ console.log(err); },
         success:function(dataFromServer) {
             $('#users').html(dataFromServer);

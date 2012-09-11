@@ -1,5 +1,5 @@
 function loadUsers() {
-    Parts.Admin.load("/spa.parts/users.html", '#users', function() {Parts.Admin.start()});
+    Parts.Admin.load("/spa.parts/users/users.html", '#users', function() {Parts.Admin.start()});
 }
 
 Parts.Admin = Backbone.Part.extend({},{ //Static
@@ -37,6 +37,22 @@ Parts.Admin = Backbone.Part.extend({},{ //Static
             },
             onSelectUser : function(domEvent) {
                 console.log("Selected : ", $(domEvent.currentTarget).attr("data-user-id"));
+                var tmp = new Models.User({id : $(domEvent.currentTarget).attr("data-user-id")});
+
+                tmp.fetch({
+                    success : function(model, infos) {
+                        console.log("SELECTED : ", model, infos);
+                        if(infos.error){
+                            $("#user_message").attr("class", "alert alert-error");
+                            $("#user_message").html(infos.error);
+                        } else {
+                            $("#user_message").attr("class", "alert alert-info");
+                            $("#user_message").html(model.get("pseudo")+ " is selected ...");
+
+                        }
+                    },
+                    error : function (err) {console.log("SELECTED ERROR : ", err); }
+                });
             }
             ,
             onDeleteUser : function(domEvent) {
@@ -51,16 +67,29 @@ Parts.Admin = Backbone.Part.extend({},{ //Static
                     error : function() {
                         //TODO: ...
                     },
-                    success : function(data) {
-                        console.log("User Model destroyed : ", data);
-                        that.collection.fetch({
-                            success:function() {
-                                $("#user_message").attr("class", "alert alert-info");
-                                $("#user_message").html(data.get("id") + " has been removed.");
-                                that.render();
+                    success : function(model, infos) {
 
-                            }
-                        });
+                        console.log("User Model destroyed called --> : ", model, infos);
+
+
+                        if(infos.error) {
+                            $("#user_message").attr("class", "alert alert-error");
+                            $("#user_message").html(infos.error);
+
+                        } else {
+                            that.collection.fetch({
+                                success:function() {
+                                    $("#user_message").attr("class", "alert alert-info");
+                                    $("#user_message").html(model.get("id") + " has been removed.");
+                                    that.render();
+
+                                }
+                            });
+
+                        }
+
+
+
 
 
                     }
@@ -98,13 +127,15 @@ Parts.Admin = Backbone.Part.extend({},{ //Static
                         isAdmin:fields[5].checked
                     });
 
-                console.log(tmpUser);
+                //console.log(tmpUser);
 
-                tmpUser.save({},{success:function(data){
+                tmpUser.save({},{success:function(data, infos){
+                    console.log("ADD USER : ", data, infos);
 
-                    if(!data.get("id")) {
 
-                        that.render(tmpUser.get("pseudo")+ " -> " + data.get("message"));
+                    if(infos.error ) {
+
+                        that.render(tmpUser.get("pseudo")+ " -> " + infos.error);
                         $("#user_message").attr("class", "alert alert-error");
                     } else {
 

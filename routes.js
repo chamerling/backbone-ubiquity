@@ -75,13 +75,15 @@ exports.routes = function (app) {
         Controllers.Users.update(req, res);
     });
 
-
-    app.get('/user/:id', function(req, res){
+    //Protected routes
+    app.get('/user/:id', [Controllers.Users.haveToBeAdmin], function(req, res, next){
         console.log("GET : /user/"+req.params.id);
         Controllers.Users.getById(req, res);
     });
 
-    app.delete('/user/:id', function(req, res){
+
+
+    app.delete('/user/:id',function(req, res){
         console.log("GET : /user/"+req.params.id);
         Controllers.Users.delete(req, res);
     });
@@ -94,10 +96,10 @@ exports.routes = function (app) {
         Controllers.Users.getAll(req, res);
     });
 
-
-    app.get('/users/login/:login', function(req, res){
-        console.log("GET (SOME) : /users/login/"+req.params.login);
-        Controllers.Users.getAuthenticatedUser(req, res);
+    //app.post('/users/login/:login', function(req, res){
+    app.post('/users/login', function(req, res){
+        console.log("GET (SOME) : /users/login/"+req.body);
+        Controllers.Users.authenticate(req, res);
     });
 
 

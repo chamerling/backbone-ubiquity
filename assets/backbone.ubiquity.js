@@ -1,7 +1,16 @@
-/**
- * Created with IntelliJ IDEA.
- * User: k33g_org
- * Date: 9/10/12
- * Time: 8:07 AM
- * To change this template use File | Settings | File Templates.
- */
+Backbone.Kind = function() {};
+Backbone.Kind.extend = Backbone.Model.extend;
+
+Parts = window.Parts = {};
+
+Backbone.Part = Backbone.Kind.extend({},{ //Static
+    load : function (url_from, selector_where, callback) {
+        $.ajax({type:"GET", url:url_from,
+            error:function(err){ console.log(err); },
+            success:function(dataFromServer) {
+                $(selector_where).html(dataFromServer);
+                callback();
+            }
+        })
+    }
+});

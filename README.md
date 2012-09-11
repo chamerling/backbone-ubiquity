@@ -312,6 +312,33 @@ And ie `humans.js` :
 
 **Please note :** url is quoted with `''` and query is a json string : all members (names and values) are quoted with `""`.
 
+##Authentication
+
+You can find :
+
+- user model : `Models.User`
+- users controller : `Controllers.Users`
+
+You can test inside the controller's method if user is authenticated or administrator :
+
+    if(Controllers.Users.isAdmin(req)) {...}
+    //or :
+    if(Controllers.Users.isAuthenticated(req))
+
+Or you can directly protect a route :
+
+    //Protected routes : administrator only, don't forget next as parameter
+    app.get('/user/:id', [Controllers.Users.haveToBeAdmin], function(req, res, next){
+        Controllers.Users.getById(req, res);
+    });
+
+    //Protected routes : you have to login
+    app.get('/user/:id', [Controllers.Users.haveToBeAuthenticated], function(req, res, next){
+        Controllers.Users.getById(req, res);
+    });
+
+**See sample :** `spa.parts/users` (client side) and `controllers/users.js` (server side).
+
 ##Websockets
 
 It's very easy to use (thanks to [socket.io](http://socket.io/)).

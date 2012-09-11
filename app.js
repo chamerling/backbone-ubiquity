@@ -45,7 +45,7 @@ mongo = require('./libs/backbone.ubiquity.js').mongo;
 require('./models/models.js');
 require('./controllers/controllers.js');
 
-require('./sockets/sockets.js');
+//require('./sockets/sockets.js');
 
 /*--------------------------------------------
 	Express parameters
@@ -67,6 +67,15 @@ app.use(express.session({
 --------------------------------------------*/
 require('./routes.js').routes(app);
 
+/*--------------------------------------------
+ Bootstrap
+ --------------------------------------------*/
+var admin = new Models.User({pseudo:"admin",password:"admin",isAdmin:true});
+Controllers.Users.addUser(admin, function(res){console.log(res);});
+
+/*--------------------------------------------
+ End Bootstrap
+ --------------------------------------------*/
 
 //TODO: app.config(?)
 app.listen(3000);

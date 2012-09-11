@@ -28,6 +28,7 @@ function welcome() {
 
             loadSample();
             loadUsers();
+            loadLogin();
 
 			console.log("WELCOME TO BACKBONE-UBIQUITY ...");
 

@@ -1,10 +1,14 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-        "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-    <title></title>
-</head>
-<body>
+<div>
+    <script type="text/template" id="login_form_tpl">
+        <input name="pseudo" type="text" placeholder="pseudo"/>
+        <input name="password" type="password" placeholder="password"/>
 
-</body>
-</html>
+
+        <a href="#" class="btn btn-primary">Login</a> <a href="#" class="btn btn-inverse">Logoff</a><br>
+        <b>{{message}} {{pseudo}} : {{firstName}} {{lastName}} / {{email}}</b>
+
+    </script>
+    <form id="login_form">
+    </form>
+
+</div>

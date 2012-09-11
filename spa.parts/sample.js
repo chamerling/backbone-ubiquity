@@ -1,33 +1,25 @@
 function loadSample() {
-    $.ajax({type:"GET", url:"/spa.parts/sample.html",
-        error:function(err){ console.log(err); },
-        success:function(dataFromServer) {
-            $('#sample').html(dataFromServer);
-            App.load();
-        }
-    })
+    Parts.App.load("/spa.parts/sample.html", '#sample', function() {Parts.App.start()});
 }
 
-App = {
+Parts.App = Backbone.Part.extend({},{ //Static
 
     views : {},
-
-    load : function () {
-
+    start : function () {
         /*
-            SOCKETS
+         SOCKETS
          */
-        var that = this;
-        this.socket_message = $("#socket_message");
-        this.socket = io.connect("http://localhost:8000");
 
-        this.socket.on("message", function(data) {
 
-            that.socket_message.html(data.firstName + " " + data.lastName);
+       /*
+        Parts.App.socket_message = $("#socket_message");
+        Parts.App.socket = io.connect("http://localhost:8000");
+        Parts.App.socket.on("message", function(data) {
+            Parts.App.socket_message.html(data.firstName + " " + data.lastName);
         });
+        */
 
-
-        this.views.HumansList = Backbone.View.extend({
+        Parts.App.views.HumansList = Backbone.View.extend({
             el : $("#humans_list"),
             initialize : function () {
                 this.template = $("#humans_list_tpl").html();
@@ -38,10 +30,46 @@ App = {
 
                 //this.el.html(renderedContent);
                 //$("#humans_list").html(renderedContent);
+            },
+            events : {
+                "click .select-human" : "onSelectHuman",
+                "click .delete-human" : "onDeleteHuman"
+            },
+            onSelectHuman : function(domEvent) {
+                console.log("Selected : ", $(domEvent.currentTarget).attr("data-human-id"));
+            }
+            ,
+            onDeleteHuman : function(domEvent) {
+                console.log("To delete : ", $(domEvent.currentTarget).attr("data-human-id"));
+                var id_to_delete = $(domEvent.currentTarget).attr("data-human-id");
+
+                var tmp = new Models.Human({id : id_to_delete});
+
+                var that = this;
+
+                tmp.destroy({
+                    error : function() {
+                        //TODO: ...
+                    },
+                    success : function(data) {
+                        console.log("Human Model destroyed : ", data);
+                        that.collection.fetch({
+                            success:function() {
+                                $("#human_message").html(data.get("id") + " has been removed.");
+                                that.render();
+
+                            }
+                        });
+
+
+                    }
+                });
+
+
             }
         });
 
-        this.views.HumanForm = Backbone.View.extend({
+        Parts.App.views.HumanForm = Backbone.View.extend({
             el : $("#human_form"),
 
             initialize: function(args) {
@@ -59,8 +87,8 @@ App = {
             },
             onClickBtnAdd : function() {
                 var fields = $("#human_form :input")
-                ,   that = this
-                ,   tmpHuman = new Models.Human({firstName:fields[0].value, lastName:fields[1].value});
+                    ,   that = this
+                    ,   tmpHuman = new Models.Human({firstName:fields[0].value, lastName:fields[1].value});
 
                 tmpHuman.save({},{success:function(){
                     that.render(fields[0].value + " " + fields[1].value + " has been added.");
@@ -76,17 +104,17 @@ App = {
 
         window.humans = new Models.Humans();
 
-        window.humansList = new App.views.HumansList({collection:humans});
+        window.humansList = new Parts.App.views.HumansList({collection:humans});
 
-        window.humanForm = new App.views.HumanForm({collection:humans, linkedView:humansList});
+        window.humanForm = new Parts.App.views.HumanForm({collection:humans, linkedView:humansList});
 
         humanForm.render();
 
         humans.fetch({success: function(data){
             humansList.render();
         }});
-
     }
-}
+
+});
 
 

@@ -1,5 +1,7 @@
 <h2>This is the sample tab</h2>
+<!--
 <div class="alert alert-info"><b>Model pushed by the server :</b> <span id="socket_message"></span></div>
+-->
 <hr>
 <div>
     <script type="text/template" id="human_form_tpl">
@@ -8,7 +10,7 @@
         <input name="lastName" type="text" placeholder="lastName"/><br>
         <a class="btn btn-primary">Add Human to list</a>
 
-        <div>{{message}}</div>
+        <div id="human_message">{{message}}</div>
     </script>
     <form id="human_form">
     </form>
@@ -31,7 +33,12 @@
 
             <tbody>{{#humans}}
             <tr>
-                <td><a href="select/#/{{id}}">{{id}}</a></td>
+
+                <td>
+                    <a class="select-human" href="#" data-human-id="{{id}}" >Select [{{id}}]</a>
+                    <a class="delete-human" href="#" data-human-id="{{id}}" >Delete</a>
+                </td>
+
                 <td>{{firstName}}</td>
                 <td>{{lastName}}</td>
             </tr>

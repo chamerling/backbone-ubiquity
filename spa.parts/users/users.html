@@ -1,6 +1,7 @@
 <h2>This is the users tab</h2>
+<!--
 <div class="alert alert-info">Users Admin, <b>User pushed by the server :</b> <span id="socket_message_user"></span></div>
-
+-->
 <hr>
 <div>
     <script type="text/template" id="user_form_tpl">
@@ -19,7 +20,15 @@
 
 </div>
 
+<!--
+class="selection" doesn't exist, it allows to trap ling in event view
 
+            events : {
+                "click a .selection" : "onSelectUser"
+            }
+
+
+-->
 <div>
     <script type="text/template" id="users_list_tpl">
 
@@ -31,16 +40,22 @@
                 <th>Last Name</th>
                 <th>Username</th>
                 <th>email</th>
+                <th>admin</th>
             </tr>
             </thead>
 
             <tbody>{{#users}}
                 <tr>
-                    <td><a href="select/#/{{id}}">{{id}}</a></td>
+                    <td>
+                        <a class="select-user" href="#" data-user-id="{{id}}" >Select</a>
+                        <a class="delete-user" href="#" data-user-id="{{id}}" >Delete</a>
+                    </td>
+
                     <td>{{firstName}}</td>
                     <td>{{lastName}}</td>
                     <td>{{pseudo}}</td>
                     <td>{{email}}</td>
+                    <td>{{isAdmin}}</td>
                 </tr>
                 {{/users}}
             </tbody>
